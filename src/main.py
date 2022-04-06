@@ -1,5 +1,5 @@
 import tkinter as tk
-import colors as color
+import src.colors as color
 tilesx = 0
 tilesy = 0
 
