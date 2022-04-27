@@ -5,9 +5,9 @@ import random
 class Game(tk.Frame):
     def __init__(self):
         tk.Frame.__init__(self)
+        self.master.title('2048')
+        self.master.iconbitmap('src/4096icon.ico')
         self.grid()
-        self.master.title("2048")
-
         self.main_grid = tk.Frame(
             self, bg=c.GRID_COLOR, bd=3, width=600, height=600
         )
@@ -17,6 +17,7 @@ class Game(tk.Frame):
         self.mainloop()
 
     def make_gui(self):
+
         self.cells = []
         for i in range(4):
             row = []
