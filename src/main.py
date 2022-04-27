@@ -1,36 +1,61 @@
 import tkinter as tk
-import colors as color
-tilesx = 600
-tilesy = 600
-#w, h
+import colors as c
+import random
+
 class Game(tk.Frame):
     def __init__(self):
         tk.Frame.__init__(self)
         self.grid()
-        self.master.title("4096")
-        self.main_grid = tk.Frame(self, bg=color.GRID_COLOR, bd=3, width=600, height=600)
-        self.main_grid.grid(pady=(100,0))
+        self.master.title("2048")
 
-    def gui(self):
-        self.tiles = []
+        self.main_grid = tk.Frame(
+            self, bg=c.GRID_COLOR, bd=3, width=600, height=600
+        )
+        self.main_grid.grid(pady=(100,0))
+        self.make_gui()
+
+        self.mainloop()
+
+    def make_gui(self):
+        self.cells = []
         for i in range(4):
             row = []
             for j in range(4):
-                tile_frame = tk.Frame(
-                    self.main_grid, bg=color.EMPTY_CELL_COLOR, width=150, height=150
+                cell_frame = tk.Frame(
+                    self.main_grid,
+                    bg=c.EMPTY_CELL_COLOR,
+                    width=150,
+                    height=150
                 )
-                tile_frame.grid(row=i, column=j, padx=5, pady=5)
-                tile_number = tk.Label(self.main_grid, bg=color.EMPTY_CELL_COLOR)
-                tile_number.grid(row=i, column=j)
-                tile_data = {"frame": cell_frame, "number": cell_number}
-                row.append(tile_data)
-            self.tiles.append(row)
+                cell_frame.grid(row=i, column=j, padx=5, pady=5)
+                cell_number = tk.Label(self.main_grid, bg=c.EMPTY_CELL_COLOR)
+                cell_number.grid(row=i,column=j)
+                cell_data = {"frame": cell_frame, "number": cell_number}
+                row.append(cell_data)
+            self.cells.append(row)
+        
+        score_frame = tk.Frame(self)
+        score_frame.place(relx=0.5, y=45, anchor="center")
+        tk.Label(
+            score_frame,
+            text="Score",
+            font=c.SCORE_LABEL_FONT
+
+        ).grid(row=0)
+        self.score_label = tk.Label(score_frame, text="0", font=c.SCORE_FONT)
+        self.score_label.grid(row=1)
 
 
-def main():
-    #x = input("Size X: ")
-    #y = input("Size Y: ")int(x), int(y)
-    Game()
+    def start_game(self):
+        self.matrix = [[0] * 4 for _ in range(4)]
 
-if __name__ == "__main__":
-    main()
+        row = random.randint(0,4)
+        col = random.randint(0,4)
+        self.cells[row][col]["frame"].configure(bg=c.CELL_COLORS[2])
+        self.cells[row][col]["number"].configure(
+            bg=c.CELL_COLORS[2],
+            fg=c
+        )
+        
+Game()
+        
