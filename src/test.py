@@ -1,34 +1,65 @@
 import tkinter as tk
+import colors as c
+import random
 
-def colorChecked():
-   labelHello.config(fg = color.get())
+master = tk.Tk()
 
-def typeChecked():
+master.geometry("200x200")
 
-   textType = typeBlod.get() + typeItalic.get()
-   if textType == 1:
-       labelHello.config(font = ("Arial", 12, "bold"))
-   elif textType == 2:
-       labelHello.config(font = ("Arial", 12, "italic"))
-   elif textType == 3:
-       labelHello.config(font = ("Arial", 12, "bold italic"))
-   else :
-       labelHello.config(font = ("Arial", 12))
+def opennewwindow():
+            
 
-top = tk.Tk()
-top.title("Radio & Check Test")
+        game = tk.Tk()
+        game.title('4096')
+        game.grid()
+        main_grid = tk.Frame(
+            game, bg=c.GRID_COLOR, bd=3, width=600, height=600
+        )
+        main_grid.grid(pady=(100,0))
+        
 
-labelHello = tk.Label(top, text = "Check the format of text.", height = 3, font=("Arial", 12))
-labelHello.pack()
+        cells = []
+        for i in range(4):
+            row = []
+            for j in range(4):
+                cell_frame = tk.Frame(
+                    main_grid,
+                    bg=c.EMPTY_CELL_COLOR,
+                    width=150,
+                    height=150
+                )
+                cell_frame.grid(row=i, column=j, padx=5, pady=5)
+                cell_number = tk.Label(main_grid, bg=c.EMPTY_CELL_COLOR)
+                cell_number.grid(row=i,column=j)
+                cell_data = {"frame": cell_frame, "number": cell_number}
+                row.append(cell_data)
+            cells.append(row)
+        
+        score_frame = tk.Frame(game)
+        score_frame.place(relx=0.5, y=45, anchor="center")
 
-color = tk.StringVar()
-tk.Radiobutton (top, text = "Red", variable = color, value = "red", command = colorChecked).pack(side = tk.LEFT)
-tk.Radiobutton(top, text = "Blue", variable = color, value = "blue", command = colorChecked).pack(side = tk.LEFT)
-tk.Radiobutton(top, text = "Green", variable = color, value = "green", command = colorChecked).pack(side = tk.LEFT)
+        tk.Label(
+            score_frame,
+            text="Score",
+            font=c.SCORE_LABEL_FONT
 
-typeBlod = tk.IntVar()
-typeItalic = tk.IntVar()
-tk.Checkbutton(top, text = "Bold", variable = typeBlod, onvalue = 1, offvalue = 0, command = typeChecked).pack(side = tk.LEFT)
-tk.Checkbutton(top, text = "Italic", variable = typeItalic, onvalue = 2, offvalue = 0, command = typeChecked).pack(side = tk.LEFT)
+        ).grid(row=0)
+        score_label = tk.Label(score_frame, text="0", font=c.SCORE_FONT)
+        score_label.grid(row=1)
 
-top.mainloop()
+        matrix = [[0] * 4 for _ in range(4)]
+
+        row = random.randint(0,4)
+        col = random.randint(0,4)
+        cells[row][col]["frame"].configure(bg=c.CELL_COLORS[2])
+        cells[row][col]["number"].configure(
+            bg=c.CELL_COLORS[2],
+            fg=c
+        )
+
+
+btn = tk.Button(master,
+			text ="Click to open a new window",
+			command = opennewwindow)
+btn.pack(pady = 10)
+master.mainloop()
