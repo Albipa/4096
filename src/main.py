@@ -1,3 +1,4 @@
+from time import sleep, time
 import tkinter as tk
 import colors as c
 import random
@@ -18,15 +19,12 @@ class Game(tk.Frame):
         self.make_gui()
         self.start_game()
 
-        self.master.bind("<Left>", self.left)
-        self.master.bind("<Right>", self.right)
-        self.master.bind("<Up>", self.up)
-        self.master.bind("<Down>", self.down)
+        self.bind_keys()
 
         self.mainloop()
 
-    def make_gui(self,):
-    
+    def make_gui(self):
+
         self.cells = []
         for i in range(4):
             row = []
@@ -82,6 +80,19 @@ class Game(tk.Frame):
             text="2")
 
         self.score = 0
+
+    def bind_keys(self):
+        self.master.bind("<Left>", self.left)
+        self.master.bind("<Right>", self.right)
+        self.master.bind("<Up>", self.up)
+        self.master.bind("<Down>", self.down)
+    
+    def unbind_keys(self):
+        self.master.bind("<Left>", self.dummy)
+        self.master.bind("<Right>", self.dummy)
+        self.master.bind("<Up>", self.dummy)
+        self.master.bind("<Down>", self.dummy)
+
 
     def stack(self):
         new_matrix = [[0] * 4 for _ in range(4)]
@@ -187,6 +198,9 @@ class Game(tk.Frame):
         self.update_GUI()
         self.game_over()
     
+    def dummy(self):
+        pass
+
     def horizontal_move_exists(self):
         for i in range(4):
             for j in range(3):
@@ -201,9 +215,21 @@ class Game(tk.Frame):
                     return True
         return False
 
+    def restartgame(self):
+
+        print(self.matrix)
+        self.matrix.clear()
+        print(self.matrix)
+        self.start_game()
+        self.update_GUI()
+        game_over_frame.withdraw()
+        self.bind_keys()
+        
 
     def game_over(self):
+        global game_over_frame
         if any(2048 in row for row in self.matrix):
+            self.unbind_keys()
             game_over_frame = tk.Frame(self.main_grid, borderwidth=2)
             game_over_frame.place(relx=0.5, rely=0.5, anchor="center")
             tk.Label(
@@ -213,18 +239,42 @@ class Game(tk.Frame):
                 fg=c.GAME_OVER_FONT_COLOR,
                 font=c.GAME_OVER_FONT).pack()
         elif not any(0 in row for row in self.matrix) and not self.horizontal_move_exists() and not self.vertical_move_exists():
+            #kanske ta bort horizontal checker och det andra
+            self.unbind_keys()
             game_over_frame = tk.Frame(self.main_grid, borderwidth=2)
             game_over_frame.place(relx=0.5, rely=0.5, anchor="center")
+            game_over_frame = tk.Toplevel()
             tk.Label(
                 game_over_frame,
                 text="Game over!",
                 bg=c.LOSER_BG,
                 fg=c.GAME_OVER_FONT_COLOR,
                 font=c.GAME_OVER_FONT).pack()
+            tk.Button(
+                game_over_frame,
+                text="Try Again?",
+                command=self.restartgame,
+                bg=c.LOSER_BG,
+                fg=c.GAME_OVER_FONT_COLOR,
+                font=c.GAME_OVER_FONT).pack()
+    
 
+    def randommoves(self):
+        while True:
+            randomchoice = random.randint(1,4)
+            if randomchoice == 1:
+                self.up()
+            elif randomchoice == 2:
+                self.down()
+            elif randomchoice == 3:
+                self.left()
+            elif randomchoice == 4:
+                self.right()
+            sleep(1)
+    
 def main():
     Game()
-
+    
 if __name__ == "__main__":
     main()
     
