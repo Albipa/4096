@@ -12,7 +12,7 @@ class Game(tk.Frame):
         
         self.grid()
         self.master.title('4096')
-        self.master.iconbitmap('src/icon.ico')
+        self.master.iconbitmap('icon.ico')
         self.main_grid = tk.Frame(
             self, bg=c.grid_color, bd=3, width=600, height=600)
         self.main_grid.grid(pady=(100,0))
