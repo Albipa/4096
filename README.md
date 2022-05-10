@@ -32,6 +32,10 @@ This program is very basic, both in gameplay and usage.
 
 Use arrow keys to move the tiles.
 
+## Known bugs
+
+Icon is not appearing for some reason.
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
